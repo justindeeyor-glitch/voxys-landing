@@ -370,26 +370,37 @@ picture { display: contents; }
 
 /* ============================================================
    3. VERTICALS
-   1440 358:13731 · 1024 358:15152 · 768 358:16573 · 360 358:17496
-   Cards sit in a row from 1024 up and stack below it.
-   The gradient only exists on the two wide frames.
+   1440 358:13731 · от 1024 и ниже 385:245
+
+   Содержимое карточки переработано заказчиком: вместо
+   маркированного списка и двух блоков с выручкой — описание
+   направления и три блока статистики. Финансовые показатели
+   (выручка, маржа EBITDA) убраны.
+
+   Карточки стоят в ряд только на широком экране. Макет даёт две
+   опорные точки: 1024 — столбиком, 1440 — в ряд. Переключение
+   поставлено на 1200: ниже трём карточкам уже тесно, подписи
+   вроде «подтверждаются рекламодателями» начинают ломаться.
    ============================================================ */
 .s-verticals {
   position: relative;
   background: var(--black);
   display: flex;
-  flex-direction: column;      /* 360 / 768 — stacked */
+  flex-direction: column;      /* ниже 1200 — столбиком */
   align-items: stretch;
   gap: 20px;
   padding: 40px 16px;
-  overflow: clip;
+  /* по горизонтали свечение шире секции и обрезается, по вертикали
+     оно намеренно выходит вверх — там обрезать нельзя */
+  overflow-x: clip;
+  overflow-y: visible;
 }
-.s-verticals__grad-wrap { display: none; }   /* not present below 1024 */
+.s-verticals__grad-wrap { display: none; }   /* только под рядом карточек */
 .s-verticals__grad {
   position: absolute;
-  left: -8%; top: -23.42%;
-  width: 116%;              /* 100% + 8% + 8%      */
-  height: 142.03%;          /* 100% + 23.42% + 18.61% */
+  left: -8%; top: -9.84%;
+  width: 116%;              /* 100% + 8% + 8%       */
+  height: 126.41%;          /* 100% + 9.84% + 16.57% */
   max-width: none;
 }
 
@@ -398,7 +409,6 @@ picture { display: contents; }
   z-index: 1;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
   gap: 20px;
   padding: 20px;
   border: 1px solid var(--green);
@@ -412,8 +422,7 @@ picture { display: contents; }
   line-height: var(--lh-22);
   color: var(--white);
 }
-.v-card__list {
-  padding-left: 27px;
+.v-card__desc {
   font-size: 18px;
   line-height: var(--lh-18);
   color: var(--white);
@@ -427,43 +436,39 @@ picture { display: contents; }
   border-radius: 12px;
   background: var(--card-fill);
 }
-.v-stat__row {
-  display: flex;
-  align-items: flex-start;   /* Figma pins the delta 3px down, not on the baseline,
-                                which keeps the row exactly as tall as the value */
-  justify-content: space-between;
-  white-space: nowrap;
-}
-.v-stat__row .v-stat__delta { margin-top: 3px; }
 .v-stat__val {
   font-size: 22px;
   font-weight: 500;
   line-height: 1;
   color: var(--white);
 }
-.v-stat__delta { font-size: 16px; line-height: var(--lh-16); color: var(--white); }
-.v-stat__lab   { font-size: 16px; line-height: var(--lh-16); color: var(--grey-dark); }
+.v-stat__lab {
+  font-size: 16px;
+  line-height: var(--lh-16);
+  color: var(--grey);
+}
 
-/* --- 1024: back into a row, gradient returns --- */
+/* 768 -> 1200: те же карточки столбиком, меняется только отступ */
+@media (min-width: 768px) {
+  .s-verticals { padding: 40px calc(16px + (var(--vw) - 768px) * 0.015625); }
+}
 @media (min-width: 1024px) {
-  .s-verticals {
-    flex-direction: row;
-    align-items: flex-start;
-    padding: 40px calc(20px + (var(--vw) - 1024px) * 0.14423077);   /* 20 -> 80 */
-  }
-  .v-card {
-    flex: 1 1 0;
-    min-width: 0;
-    min-height: calc(426px + (var(--vw) - 1024px) * -0.10576923);   /* 426 -> 382 */
-  }
+  .s-verticals { padding: 40px calc(20px + (var(--vw) - 1024px) * 0.14423077); }
+}
+
+/* --- 1200: карточки в ряд, свечение возвращается --- */
+@media (min-width: 1200px) {
+  /* stretch, а не flex-start: на промежуточных ширинах текст в карточках
+     ломается по-разному и ряд получается рваным. На 1440 они и так равны. */
+  .s-verticals { flex-direction: row; align-items: stretch; }
+  .v-card { flex: 1 1 0; min-width: 0; }
   .s-verticals__grad-wrap {
     display: block;
     position: absolute;
-    right: calc((var(--vw) - 1024px) * 0.19230769);                 /* 0 -> 80 */
-    top: calc(50% + 1.5px);
-    transform: translateY(-50%);
-    width: calc(1024px + (var(--vw) - 1024px) * 0.61538462);        /* 1024 -> 1280 */
-    height: calc(379px + (var(--vw) - 1024px) * 0.13942308);        /* 379 -> 437 */
+    right: calc((var(--vw) - 1024px) * 0.19230769);             /* 0 -> 80 */
+    top: -36px;
+    width: calc(1024px + (var(--vw) - 1024px) * 0.61538462);    /* 1024 -> 1280 */
+    height: 491px;
     z-index: 0;
   }
 }
@@ -471,8 +476,7 @@ picture { display: contents; }
 /* --- 1440 --- */
 @media (min-width: 1440px) {
   .s-verticals { padding: 40px 80px; }
-  .v-card { min-height: 382px; }
-  .s-verticals__grad-wrap { right: 80px; width: 1280px; height: 437px; }
+  .s-verticals__grad-wrap { right: 80px; width: 1280px; }
 }
 
 /* ============================================================
@@ -1277,25 +1281,16 @@ a.eco:active { scale: 1.005; }
    `disc` scales with font-size (6px at 18px, 7px at 22px), so the
    marker is drawn by hand instead.
    ============================================================ */
-.v-card__list,
 .s-arch__notes { list-style: none; }
 
-.v-card__list li,
 .s-arch__notes li { position: relative; }
 
-.v-card__list li::before,
 .s-arch__notes li::before {
   content: '';
   position: absolute;
   width: 4px;
   height: 4px;
   border-radius: 50%;
-}
-/* 18px / 21.375 line — dot centred on the first line */
-.v-card__list li::before {
-  left: -15.5px;
-  top: 11.6875px;
-  background: var(--white);
 }
 /* 22px / 26 line — the first run is green, so the dot is too */
 .s-arch__notes li::before {
