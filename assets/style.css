@@ -1,0 +1,1197 @@
+/* ============================================================
+   VOXYS — one-pager
+   Figma: 31KSX4l92v4w9qMG7B9sVw  ·  anchors 1440 / 1024 / 768 / 360
+   ============================================================ */
+
+/* ---------- tokens (Figma variables) ---------- */
+:root {
+  --green:       #008B51;
+  --green-light: #A8D5BA;
+  --grey-dark:   #6E767F;
+  --grey:        #F2F2F2;
+  --black:       #000000;
+  --white:       #FFFFFF;
+
+  --card-fill:   rgba(255, 255, 255, .3);
+
+  /* Figma's "auto" leading for Golos Text is not one ratio — it comes from
+     the font metrics and lands on whole pixels. Measured from the file:
+       12 -> 14   14 -> 17   16 -> 19   18 -> 22   22 -> 26
+     Chromium's own `normal` is 1.25 and drifts from all of them. */
+  --lh:    1.1875;
+  --lh-12: 14px;
+  --lh-14: 17px;
+  --lh-16: 19px;
+  --lh-18: 22px;
+  --lh-22: 26px;
+
+  /* fluid horizontal padding: 120px @1440 → 16px @360 */
+  --pad-x: clamp(16px, 8.333vw, 120px);
+  /* fluid scale factor, 1 at 1440 and below-proportional on small screens */
+  --k: clamp(0.72, 0.4 + 0.4166vw, 1);
+}
+
+/* ---------- reset ---------- */
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  background: var(--black);
+  color: var(--white);
+  font-family: 'Golos Text', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  font-weight: 400;
+  overflow-x: hidden;
+}
+img, svg { display: block; max-width: 100%; }
+p, ul { margin: 0; }
+ul { padding: 0; }
+
+/* shared section shell */
+.section { position: relative; background: var(--black); }
+
+/* ============================================================
+   1. HERO   (1440 358:13696 · 1024 358:15117 · 768 358:16538 · 360 358:17461)
+   Anchors:  height 483 / 483 / 543 / 800   at 360 / 768 / 1024 / 1440
+   Values between anchors are interpolated linearly, so the layout is
+   fluid and lands exactly on the design at each breakpoint.
+   ============================================================ */
+.s-hero {
+  position: relative;
+  background: var(--black);
+  overflow: hidden;
+  display: flex;
+  /* --- 360 --- */
+  flex-direction: column;
+  align-items: flex-end;
+  min-height: 483px;
+  padding: 80px 16px 40px;
+}
+picture { display: contents; }
+
+.s-hero__bgwrap {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 0;
+}
+.s-hero__bg {
+  position: absolute;
+  max-width: none;
+  /* 360 crop */
+  left: 9.17%;
+  top: -0.03%;
+  width: 206.11%;
+  height: 100.05%;
+}
+.s-hero__inner {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 90px;
+}
+.s-hero__top {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 30px;
+}
+.s-hero__logo { width: 280px; height: 60px; }
+
+.s-hero__tagline {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 7.5px;
+  width: 331.5px;
+  max-width: 100%;
+  font-size: 32px;
+  line-height: 1;
+  color: var(--grey-dark);
+}
+.s-hero__tagline span { display: block; width: 100%; }
+.s-hero__tagline .is-right { text-align: right; }
+
+.s-hero__kicker {
+  width: 331.5px;
+  max-width: 100%;
+  font-size: 24px;
+  line-height: 1;
+  color: var(--green);
+}
+
+/* --- 768 --- */
+@media (min-width: 768px) {
+  .s-hero {
+    min-height: calc(483px + (100vw - 768px) * 0.234375);
+  }
+  .s-hero__inner { align-items: flex-start; }
+  .s-hero__bg { left: 0; top: -4.79%; width: 105.55%; height: 109.37%; }
+}
+
+/* --- 1024 --- */
+@media (min-width: 1024px) {
+  .s-hero {
+    flex-direction: row;
+    align-items: flex-end;
+    min-height: calc(543px + (100vw - 1024px) * 0.6177885);
+    padding: 60px
+             calc(20px + (100vw - 1024px) * 0.2403846)
+             calc(90px + (100vw - 1024px) * 0.0721154);
+  }
+  .s-hero__inner { width: auto; }
+  .s-hero__bgwrap {
+    inset: auto;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: calc(984px + (100vw - 1024px) * 0.7115385);
+    aspect-ratio: 984 / 525;
+  }
+  .s-hero__bg { left: 0; top: 0; width: 100%; height: 100%; object-fit: cover; }
+}
+
+/* --- 1440 --- */
+@media (min-width: 1440px) {
+  .s-hero { min-height: 800px; padding: 60px 120px 120px; }
+  .s-hero__bgwrap { top: calc(50% + 1.5px); width: 1280px; }
+}
+
+/* ---------- shared bits ---------- */
+.c-green { color: var(--green); }
+
+/* ============================================================
+   2. LIFECYCLE
+   1440 358:13712 · 1024 358:15133 · 768 358:16554 · 360 358:17477
+
+   NOTE: at 360 the design leaves this diagram in its desktop
+   3-column form, 734px wide inside a 360 frame, so half of it is
+   clipped off-screen. Per the client's call the layout is kept
+   exactly as designed and the stage scrolls horizontally instead,
+   so nothing is invented and no content is lost.
+   ============================================================ */
+.s-cycle {
+  /* --- 360 anchor --- */
+  --cy-title:      28px;
+  --cy-pb:         40px;
+  --cy-stage-h:    236px;
+  --cy-col-w:      186px;   /* left */
+  --cy-col-w-r:    216px;   /* right — wider below 1024 in the design */
+  --cy-item-t:     14px;
+  --cy-item-d:     12px;
+  --cy-item-gap:   4px;
+  --cy-img-w:      332px;
+  --cy-img-h:      142px;
+  --cy-center-gap: 132px;
+  --cy-item-dlh:   14px;
+
+  position: relative;
+  background: var(--black);
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  padding: 40px 0 var(--cy-pb);
+}
+.s-cycle__title {
+  margin: 0;
+  padding: 0 16px;
+  font-size: var(--cy-title);
+  font-weight: 500;
+  line-height: 1;
+  text-align: center;
+  color: var(--white);
+}
+
+/* below 768 the stage keeps its designed width and scrolls */
+.s-cycle__viewport {
+  width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 0 16px;
+  -webkit-overflow-scrolling: touch;
+}
+.s-cycle__stage {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 734px;
+  height: var(--cy-stage-h);
+}
+.s-cycle__col {
+  display: flex;
+  flex-direction: column;
+  gap: var(--cy-item-gap);
+  width: var(--cy-col-w);
+  flex-shrink: 0;
+}
+.s-cycle__col--left  { text-align: right; }
+.s-cycle__col--right { width: var(--cy-col-w-r); }
+
+.s-cycle__img {
+  width: var(--cy-img-w);
+  height: var(--cy-img-h);
+  object-fit: cover;
+  flex-shrink: 0;
+}
+.s-cycle__center {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--cy-center-gap);
+  width: 388px;
+  text-align: center;
+}
+
+/* one labelled node of the cycle */
+.cyc {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 12px;
+  border-radius: 12px;
+  overflow: clip;
+}
+.cyc__t {
+  font-size: var(--cy-item-t);
+  font-weight: 500;
+  line-height: 1;
+  color: var(--white);
+}
+.cyc__d {
+  font-size: var(--cy-item-d);
+  line-height: var(--cy-item-dlh);
+  color: var(--grey-dark);
+}
+.cyc__rule {
+  position: relative;
+  display: block;
+  height: 0;              /* Figma <line> contributes 0 to layout */
+  width: 100%;
+}
+.cyc__rule::after {
+  content: '';
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 1px;
+  background: var(--grey-dark);
+}
+.cyc--nowrap .cyc__t { white-space: nowrap; }
+
+/* the wide frames break this label by hand; the narrow ones let it flow */
+@media (max-width: 1023.98px) { .cyc__br { display: none; } }
+
+/* 360 -> 768 */
+@media (min-width: 360px) {
+  .s-cycle {
+    --cy-pb:         calc(40px  + (100vw - 360px) * 0.03921569);
+    --cy-stage-h:    calc(236px + (100vw - 360px) * 0.00980392);
+    --cy-center-gap: calc(132px + (100vw - 360px) * 0.14215686);
+  }
+}
+
+/* --- 768 --- */
+@media (min-width: 768px) {
+  .s-cycle {
+    --cy-pb:         56px;
+    --cy-stage-h:    240px;
+    --cy-center-gap: calc(190px + (100vw - 768px) * -0.0546875);
+    --cy-col-w:      calc(186px + (100vw - 768px) * 0.359375);
+    --cy-col-w-r:    calc(216px + (100vw - 768px) * 0.2421875);
+    --cy-item-t:     calc(14px  + (100vw - 768px) * 0.015625);
+    --cy-item-gap:   calc(4px   + (100vw - 768px) * 0.015625);
+    --cy-img-w:      calc(332px + (100vw - 768px) * 0.375);
+    --cy-img-h:      calc(142px + (100vw - 768px) * 0.16015625);
+  }
+  .s-cycle__viewport { overflow-x: visible; }
+  .s-cycle__stage { width: 100%; }
+}
+
+/* --- 1024 --- */
+@media (min-width: 1024px) {
+  .s-cycle {
+    --cy-title:      calc(28px  + (100vw - 1024px) * 0.00961538);
+    --cy-pb:         calc(56px  + (100vw - 1024px) * 0.05769231);
+    --cy-stage-h:    calc(240px + (100vw - 1024px) * 0.36778846);
+    --cy-col-w:      calc(278px + (100vw - 1024px) * 0.07211538);
+    --cy-col-w-r:    calc(278px + (100vw - 1024px) * 0.07211538);
+    --cy-item-t:     calc(18px  + (100vw - 1024px) * 0.00961538);
+    --cy-item-d:     calc(12px  + (100vw - 1024px) * 0.00480769);
+    --cy-item-gap:   calc(8px   + (100vw - 1024px) * 0.00961538);
+    --cy-img-w:      calc(428px + (100vw - 1024px) * 0.78245192);
+    --cy-img-h:      calc(183px + (100vw - 1024px) * 0.33413462);
+    --cy-center-gap: calc(176px + (100vw - 1024px) * 0.35096154);
+    --cy-item-dlh:   calc(14px  + (100vw - 1024px) * 0.00721154);
+  }
+  .s-cycle__viewport { padding: 0 20px; }
+}
+
+/* --- 1440 --- */
+@media (min-width: 1440px) {
+  .s-cycle {
+    --cy-title: 32px;  --cy-pb: 80px;   --cy-stage-h: 393px;
+    --cy-col-w: 308px; --cy-col-w-r: 308px; --cy-item-t: 22px; --cy-item-d: 14px;
+    --cy-item-gap: 12px; --cy-img-w: 753.5px; --cy-img-h: 322px;
+    --cy-center-gap: 322px; --cy-item-dlh: 17px;
+  }
+  .s-cycle__viewport { padding: 0 40px; }
+}
+
+/* ============================================================
+   3. VERTICALS
+   1440 358:13731 · 1024 358:15152 · 768 358:16573 · 360 358:17496
+   Cards sit in a row from 1024 up and stack below it.
+   The gradient only exists on the two wide frames.
+   ============================================================ */
+.s-verticals {
+  position: relative;
+  background: var(--black);
+  display: flex;
+  flex-direction: column;      /* 360 / 768 — stacked */
+  align-items: stretch;
+  gap: 20px;
+  padding: 40px 16px;
+  overflow: hidden;
+}
+.s-verticals__grad-wrap { display: none; }   /* not present below 1024 */
+.s-verticals__grad {
+  position: absolute;
+  left: -8%; top: -27%;
+  width: 116%;            /* 100% + 8% + 8%   */
+  height: 163.76%;        /* 100% + 27% + 36.76% */
+  max-width: none;
+}
+
+.v-card {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 20px;
+  border: 1px solid var(--green);
+  border-radius: 20px;
+}
+.v-card__head { display: flex; flex-direction: column; gap: 12px; }
+.v-card__title {
+  margin: 0;
+  font-size: 22px;
+  font-weight: 700;
+  line-height: var(--lh-22);
+  color: var(--white);
+}
+.v-card__list {
+  padding-left: 27px;
+  font-size: 18px;
+  line-height: var(--lh-18);
+  color: var(--white);
+}
+.v-card__stats { display: flex; flex-direction: column; gap: 12px; }
+.v-stat {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 12px 20px;
+  border-radius: 12px;
+  background: var(--card-fill);
+}
+.v-stat__row {
+  display: flex;
+  align-items: flex-start;   /* Figma pins the delta 3px down, not on the baseline,
+                                which keeps the row exactly as tall as the value */
+  justify-content: space-between;
+  white-space: nowrap;
+}
+.v-stat__row .v-stat__delta { margin-top: 3px; }
+.v-stat__val {
+  font-size: 22px;
+  font-weight: 500;
+  line-height: 1;
+  color: var(--white);
+}
+.v-stat__delta { font-size: 16px; line-height: var(--lh-16); color: var(--white); }
+.v-stat__lab   { font-size: 16px; line-height: var(--lh-16); color: var(--grey-dark); }
+
+/* --- 1024: back into a row, gradient returns --- */
+@media (min-width: 1024px) {
+  .s-verticals {
+    flex-direction: row;
+    align-items: flex-start;
+    padding: 40px calc(20px + (100vw - 1024px) * 0.14423077);   /* 20 -> 80 */
+  }
+  .v-card {
+    flex: 1 1 0;
+    min-width: 0;
+    min-height: calc(426px + (100vw - 1024px) * -0.10576923);   /* 426 -> 382 */
+  }
+  .s-verticals__grad-wrap {
+    display: block;
+    position: absolute;
+    right: calc((100vw - 1024px) * 0.19230769);                 /* 0 -> 80 */
+    top: calc(50% + 1.5px);
+    transform: translateY(-50%);
+    width: calc(1024px + (100vw - 1024px) * 0.61538462);        /* 1024 -> 1280 */
+    height: 379px;
+    z-index: 0;
+  }
+}
+
+/* --- 1440 --- */
+@media (min-width: 1440px) {
+  .s-verticals { padding: 40px 80px; }
+  .v-card { min-height: 382px; }
+  .s-verticals__grad-wrap { right: 80px; width: 1280px; }
+}
+
+/* ============================================================
+   4. ECOSYSTEM
+   1440 358:13739 · 1024 358:15160 · 768 358:16577 · 360 358:17500
+   Cards keep their designed widths and wrap from 1024 up
+   (4/4/3 at 1440, 3/3/3/2 at 1024); below that they go full width.
+   ============================================================ */
+.s-eco {
+  --eco-title: 28px;
+  background: var(--black);
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  padding: 40px 16px;
+}
+.s-eco__title {
+  margin: 0;
+  font-size: var(--eco-title);
+  font-weight: 500;
+  line-height: 1;
+  text-align: center;
+  color: var(--white);
+}
+.s-eco__grid {
+  display: flex;
+  flex-wrap: wrap;
+  align-content: flex-start;
+  justify-content: center;
+  gap: 20px;
+}
+.eco {
+  width: 100%;              /* stacked below 1024 */
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 12px;
+  border: 1px solid var(--green);
+  border-radius: 12px;
+}
+.eco__t {
+  font-size: 22px;
+  font-weight: 500;
+  line-height: 1;
+  color: var(--white);
+}
+.eco__d {
+  font-size: 16px;
+  line-height: var(--lh-16);
+  color: var(--grey-dark);
+}
+
+/* Trailing empty lines differ per frame: the 768 artboard carries one on
+   four more labels than the others, and VOXwfm has one on both narrow frames. */
+.eco-br-t { display: none; }
+@media (min-width: 768px) and (max-width: 1023.98px) { .eco-br-t { display: inline; } }
+@media (min-width: 1024px) { .eco-br-n { display: none; } }
+
+/* 768 -> 1024 */
+@media (min-width: 768px) {
+  .s-eco {
+    --eco-title: calc(28px + (100vw - 768px) * 0.015625);
+    padding: 40px calc(16px + (100vw - 768px) * 0.015625);
+  }
+}
+
+/* --- 1024: cards take their designed widths again --- */
+@media (min-width: 1024px) {
+  .s-eco {
+    --eco-title: calc(32px + (100vw - 1024px) * 0);
+    padding: 40px calc(20px + (100vw - 1024px) * 0.04807692);
+  }
+  .eco { flex: 0 1 auto; width: var(--w); max-width: 100%; }
+}
+
+/* --- 1440 --- */
+@media (min-width: 1440px) {
+  .s-eco { --eco-title: 32px; padding: 40px; }
+}
+
+/* ============================================================
+   5. ARCHITECTURE
+   1440 358:13775 · 1024 358:15196 · 768 358:16613 · 360 358:17536
+
+   NOTE: below 1024 the design drops two of the three columns —
+   the 8 lifecycle stages and the 11 platform products are absent
+   from the 768 and 360 frames, leaving only the three direction
+   cards (and no decorative objects). Reproduced as designed.
+   ============================================================ */
+.s-arch {
+  /* --- 360 / 768 anchor --- */
+  --ar-title:     32px;
+  --ar-sub:       22px;
+  --ar-notes:     18px;
+  --ar-notes-lh:  22px;
+  --ar-pad:       16px;
+  --ar-notes-ind: 27px;   /* Figma: bullet indent = font-size * 1.5 */
+  background: var(--black);
+}
+
+.s-arch__head {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  padding: 40px var(--ar-pad) 0;   /* no bottom pad below 1024 — see body */
+}
+.s-arch__title {
+  margin: 0;
+  width: 100%;
+  font-size: var(--ar-title);
+  font-weight: 500;
+  line-height: 1;
+  color: var(--white);
+}
+.s-arch__title-em { font-weight: 600; color: var(--green); }
+
+.s-arch__sub {
+  width: 100%;
+  font-size: var(--ar-sub);
+  font-weight: 600;
+  line-height: 1;
+  color: var(--white);
+}
+.s-arch__x { font-weight: 900; color: var(--green); }
+
+.s-arch__notes {
+  width: 100%;
+  list-style: none;
+  padding-left: var(--ar-notes-ind);
+  font-size: var(--ar-notes);
+  line-height: var(--ar-notes-lh);
+  color: var(--grey-dark);
+}
+
+/* ---- columns ---- */
+.s-arch__body {
+  display: flex;
+  gap: 20px;
+  padding: 20px var(--ar-pad) 40px;   /* 20 = the gap that follows the notes */
+}
+.arch-col {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+/* below 1024 only the three direction cards survive */
+.arch-col--stages,
+.arch-col--products { display: none; }
+.arch-col--dirs { width: 100%; }
+
+/* left — 8 lifecycle stages */
+.stage {
+  flex: 1 1 0;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 20px;
+  border: 1px solid var(--green);
+  border-radius: 20px;
+}
+.stage__n {
+  font-size: 22px;
+  font-weight: 700;
+  line-height: var(--lh-22);
+  color: var(--green);
+  white-space: nowrap;
+}
+.stage__t {
+  font-size: 22px;
+  font-weight: 500;
+  line-height: var(--lh-22);
+  color: var(--white);
+  white-space: nowrap;
+}
+
+/* middle — three business directions */
+.dir {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 20px;
+  padding: 20px;
+  border: 1px solid var(--green);
+  border-radius: 20px;
+  overflow: clip;
+}
+.dir__obj { display: none; }         /* only drawn from 1024 up */
+.dir__text {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.dir__t {
+  font-size: 22px;
+  font-weight: 700;
+  line-height: var(--lh-22);
+  color: var(--white);
+}
+.dir__d {
+  font-size: 18px;
+  line-height: var(--lh-18);
+  color: var(--grey-dark);
+}
+
+/* right — 11 platform products */
+.prod {
+  flex: 1 1 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 20px;
+  border: 1px solid var(--green);
+  border-radius: 20px;
+}
+.prod__left { display: flex; align-items: center; gap: 12px; min-width: 0; }
+.prod__dot {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.prod__dot--a { background: var(--green); }
+.prod__dot--b { background: var(--white); }
+.prod__dot--c { background: var(--green-light); }
+.prod__t {
+  font-size: 22px;
+  font-weight: 500;
+  line-height: var(--lh-22);
+  color: var(--white);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.badge {
+  padding: 4px 16px;
+  border-radius: 200px;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 17px;      /* Figma rounds the 14px line box to 17 */
+  color: var(--white);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.badge--ext { background: rgba(0, 139, 81, .4);     border: 1px solid var(--green); }
+.badge--int { background: rgba(255, 255, 255, .4);  border: 1px solid var(--grey); }
+
+/* 768 -> 1024 */
+@media (min-width: 768px) {
+  .s-arch {
+    --ar-sub: calc(22px + (100vw - 768px) * 0.0078125);
+    --ar-pad: calc(16px + (100vw - 768px) * 0.015625);
+  }
+}
+
+/* --- 1024: all three columns return --- */
+@media (min-width: 1024px) {
+  .s-arch {
+    --ar-title:    calc(32px + (100vw - 1024px) * 0.03846154);
+    --ar-sub:      calc(24px + (100vw - 1024px) * 0.01923077);
+    --ar-notes:    calc(18px + (100vw - 1024px) * 0.00961538);
+    --ar-notes-lh: calc(22px + (100vw - 1024px) * 0.00961538);
+    --ar-pad:      calc(20px + (100vw - 1024px) * 0.14423077);
+    --ar-notes-ind: calc(27px + (100vw - 1024px) * 0.01442308);
+    --ar-body-h:   calc(950px + (100vw - 1024px) * 0.02163462);
+  }
+  .s-arch__head { padding-bottom: 40px; }
+  .s-arch__body { padding-top: 0; }
+  .arch-col { height: var(--ar-body-h); }
+  .arch-col--stages {
+    display: flex;
+    width: calc(357px + (100vw - 1024px) * 0.10576923);
+    flex-shrink: 0;
+  }
+  .arch-col--dirs { width: 230px; flex-shrink: 0; }
+  .arch-col--products {
+    display: flex;
+    width: calc(357px + (100vw - 1024px) * 0.60576923);
+    flex-shrink: 0;
+  }
+  .dir { flex: 1 1 0; }
+  .dir__obj {
+    display: block;
+    position: absolute;
+    right: -1px;
+    bottom: -1px;
+    width: 160px;
+    height: 160px;
+    pointer-events: none;
+  }
+}
+
+/* --- 1440 --- */
+@media (min-width: 1440px) {
+  .s-arch {
+    --ar-title: 48px; --ar-sub: 32px;
+    --ar-notes: 22px; --ar-notes-lh: 26px;
+    --ar-pad: 80px;   --ar-body-h: 959px;  --ar-notes-ind: 33px;
+  }
+  .arch-col--stages   { width: 401px; }
+  .arch-col--products { width: 609px; }
+}
+
+/* ============================================================
+   6. TRUST
+   1440 358:14309 · 1024 358:15730 · 768 358:16653
+   The 360 frame has no such section at all, so it is hidden below 768.
+   ============================================================ */
+.s-trust {
+  --tr-pad:      36px;   /* side inset shared by stats, tabs and the wall */
+  --tr-gap:      20px;
+  --tr-title:    28px;
+  --tr-tab-fs:   12px;
+  --tr-tab-lh:   14px;
+  --tr-tab-gap:  25px;
+  --tr-tab-h:    54px;
+  --tr-grad-top: 204px;
+  --tr-grad-h:   334px;
+
+  position: relative;
+  background: var(--black);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--tr-gap);
+  padding: 40px 0;
+}
+@media (max-width: 767px) { .s-trust { display: none; } }
+
+.s-trust__title {
+  margin: 0;
+  font-size: var(--tr-title);
+  font-weight: 500;
+  line-height: 1;
+  text-align: center;
+  color: var(--white);
+  white-space: nowrap;
+}
+.s-trust__stats {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  gap: 40px;
+  align-items: flex-start;
+  width: 100%;
+  padding: 0 var(--tr-pad);
+}
+.s-trust__stat {
+  flex: 1 1 0;
+  min-width: 0;
+  height: auto;
+  aspect-ratio: 620 / 182;
+  object-fit: cover;
+}
+.s-trust__lower {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: 100%;
+  padding: 0 var(--tr-pad);
+}
+.s-trust__tabs {
+  display: flex;
+  align-items: stretch;
+  gap: var(--tr-tab-gap);
+  width: 100%;
+}
+.tab {
+  flex: 1 1 0;
+  min-width: 0;
+  min-height: var(--tr-tab-h);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* 30px of side padding makes the label wrap past its designed two
+     lines once the tab narrows, so it is trimmed below 1024 */
+  padding: 12px;
+  border: 1px solid var(--green);
+  border-radius: 12px;
+  font-size: var(--tr-tab-fs);
+  font-weight: 500;
+  line-height: var(--tr-tab-lh);
+  text-align: center;
+  color: var(--white);
+}
+.s-trust__wall {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 3746 / 1181;
+  object-fit: cover;
+}
+.s-trust__grad {
+  position: absolute;
+  left: 0;
+  top: var(--tr-grad-top);
+  width: 100%;
+  height: var(--tr-grad-h);
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 0;
+}
+.s-trust__grad img {
+  position: absolute;
+  left: 0;
+  top: -0.02%;
+  width: 100%;
+  height: 121.9%;
+  max-width: none;
+}
+
+/* 768 -> 1024 */
+@media (min-width: 768px) {
+  .s-trust {
+    --tr-pad:      calc(36px  + (100vw - 768px) * 0.015625);
+    --tr-title:    calc(28px  + (100vw - 768px) * 0.015625);
+    --tr-grad-top: calc(204px + (100vw - 768px) * 0.16015625);
+    --tr-grad-h:   calc(334px + (100vw - 768px) * 0.30078125);
+  }
+}
+
+/* --- 1024 --- */
+@media (min-width: 1024px) {
+  .s-trust {
+    --tr-pad:      calc(40px  + (100vw - 1024px) * 0.09615385);
+    --tr-gap:      calc(20px  + (100vw - 1024px) * 0.04807692);
+    --tr-title:    32px;
+    --tr-tab-fs:   calc(12px  + (100vw - 1024px) * 0.01442308);
+    --tr-tab-lh:   calc(14px  + (100vw - 1024px) * 0.01923077);
+    --tr-tab-gap:  calc(25px  + (100vw - 1024px) * 0.01682692);
+    --tr-tab-h:    calc(54px  + (100vw - 1024px) * 0.03846154);
+    --tr-grad-top: calc(245px + (100vw - 1024px) * 0.11778846);
+    --tr-grad-h:   calc(411px + (100vw - 1024px) * 0.19951923);
+  }
+  .tab { padding: 12px 30px; }
+}
+
+/* --- 1440: the two-line tabs are 70 and the one-line ones 68 --- */
+@media (min-width: 1440px) {
+  .s-trust {
+    --tr-pad: 80px; --tr-gap: 40px; --tr-title: 32px;
+    --tr-tab-fs: 18px; --tr-tab-lh: 22px; --tr-tab-gap: 32px;
+    --tr-grad-top: 294px; --tr-grad-h: 494px;
+  }
+  .s-trust__tabs { align-items: flex-start; }
+  .tab { min-height: 0; }
+  .tab--1line { height: 68px; }
+}
+
+/* ============================================================
+   7. MISSION & VALUES
+   1440 358:14343 · 1024 358:15764 · 768 358:16687 · 360 358:17576
+   Type sizes are identical at every width; only the two layouts
+   change — claim/mission and the four values stack below 1024.
+   Everything here is leading-none in the design.
+   ============================================================ */
+.s-mission {
+  --ms-pad:      16px;
+  --ms-top-gap:  80px;
+  --ms-val-gap:  40px;
+
+  background: var(--black);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 40px;
+  padding: 40px var(--ms-pad) 80px;
+}
+.s-mission__top {
+  display: flex;
+  flex-direction: column;       /* stacked below 1024 */
+  align-items: flex-start;
+  gap: var(--ms-top-gap);
+  width: 100%;
+}
+.s-mission__claim {
+  width: 100%;
+  font-size: 36px;
+  font-weight: 500;
+  line-height: 1;
+  color: var(--white);
+}
+.s-mission__box {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 20px;
+}
+.s-mission__label {
+  font-size: 32px;
+  line-height: 1;
+  color: var(--grey-dark);
+  white-space: nowrap;
+}
+.s-mission__text {
+  font-size: 28px;
+  font-weight: 500;
+  line-height: 1;
+  color: var(--white);
+}
+
+.s-mission__wordmark {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1320 / 282.340087890625;
+}
+
+.s-mission__values {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: 100%;
+}
+.s-mission__grid {
+  display: flex;
+  flex-direction: column;       /* stacked below 1024 */
+  align-items: stretch;
+  gap: var(--ms-val-gap);
+  width: 100%;
+  text-transform: lowercase;   /* the design lowercases this block */
+}
+.val {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  /* the design sets word-break on these; "интеллектуальное" is wider than
+     the 231px column at 1024 and has to split mid-word, as it does in Figma */
+  overflow-wrap: break-word;
+}
+.val__t {
+  font-size: 28px;
+  font-weight: 500;
+  line-height: 1;
+  color: var(--white);
+}
+.val__d {
+  font-size: 20px;
+  line-height: 1;
+  color: var(--grey-dark);
+}
+
+/* 768 -> 1024 */
+@media (min-width: 768px) {
+  .s-mission { --ms-pad: calc(16px + (100vw - 768px) * 0.015625); }
+}
+/* the 768 frame is the one width where this label has no line break */
+@media (min-width: 768px) and (max-width: 1023.98px) {
+  .val__br { display: none; }
+}
+
+/* --- 1024: claim beside the mission, values in four columns --- */
+@media (min-width: 1024px) {
+  .s-mission {
+    --ms-pad:     calc(20px + (100vw - 1024px) * 0.09615385);
+    --ms-top-gap: calc(20px + (100vw - 1024px) * 0.14423077);
+    --ms-val-gap: calc(20px + (100vw - 1024px) * 0.04807692);
+  }
+  .s-mission__top { flex-direction: row; align-items: flex-end; }
+  .s-mission__claim {
+    width: calc(461px + (100vw - 1024px) * 0.11365385);
+    flex-shrink: 0;
+  }
+  .s-mission__box { flex: 1 1 0; min-width: 0; width: auto; }
+  .s-mission__grid { flex-direction: row; align-items: flex-start; }
+  .val { flex: 1 1 0; min-width: 0; }
+}
+
+/* --- 1440 --- */
+@media (min-width: 1440px) {
+  .s-mission { --ms-pad: 60px; --ms-top-gap: 80px; --ms-val-gap: 40px; }
+  .s-mission__claim { width: 508.278px; }
+}
+
+/* ============================================================
+   8. FOOTER
+   1440 358:14372 · 1024 358:15793 · 768 358:16716 · 360 358:17605
+   Two different background photographs: the wide frames use the
+   one with the white card (so the claim is black there), the
+   narrow frames a full-bleed circuit board (claim white, light logo).
+   ============================================================ */
+.s-footer {
+  --ft-h:        845px;
+  --ft-bg-l:     0px;
+  --ft-bg-t:     0px;
+  --ft-bg-w:     100%;
+  --ft-bg-h:     845px;
+  --ft-card-l:   16px;
+  --ft-card-t:   80px;
+  --ft-card-w:   328px;
+  --ft-qr-l:     50%;
+  --ft-qr-t:     468px;
+  --ft-qr-x:     -50%;
+  --ft-claim:    var(--white);
+
+  position: relative;
+  background: var(--black);
+  height: var(--ft-h);
+  overflow: hidden;
+}
+.s-footer__bg {
+  position: absolute;
+  left: var(--ft-bg-l);
+  top: var(--ft-bg-t);
+  width: var(--ft-bg-w);
+  height: var(--ft-bg-h);
+  max-width: none;
+  object-fit: cover;
+}
+.s-footer__card {
+  position: absolute;
+  left: var(--ft-card-l);
+  top: var(--ft-card-t);
+  width: var(--ft-card-w);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 90px;
+}
+.s-footer__brand {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 30px;
+}
+.s-footer__logo { width: 280px; height: 60px; }
+.s-footer__claim {
+  width: 100%;
+  font-size: 24px;
+  line-height: 1;
+  color: var(--ft-claim);
+}
+.s-footer__kicker {
+  width: 331.5px;
+  font-size: 24px;
+  line-height: 1;
+  color: var(--green);
+}
+
+.s-footer__contact {
+  position: absolute;
+  left: var(--ft-qr-l);
+  top: var(--ft-qr-t);
+  transform: translateX(var(--ft-qr-x));
+  width: 253px;
+}
+.s-footer__qr {
+  width: 252px;
+  height: 252px;
+  margin-left: .5px;
+}
+.s-footer__url {
+  display: block;
+  margin-top: 10px;        /* 262 - 252 */
+  font-size: 40px;
+  font-weight: 700;
+  line-height: 1;
+  color: var(--white);
+  text-decoration: none;
+}
+
+/* 360 -> 768 */
+@media (min-width: 360px) {
+  .s-footer {
+    --ft-h:      calc(845px + (100vw - 360px) * -0.18382353);
+    --ft-bg-h:   calc(845px + (100vw - 360px) * -0.08578431);
+    --ft-card-w: min(331.5px, calc(100vw - 32px));
+    --ft-qr-t:   calc(468px + (100vw - 360px) * -0.09803922);
+  }
+}
+
+/* --- 768: QR moves under the card, flush left --- */
+@media (min-width: 768px) {
+  .s-footer {
+    --ft-h: 770px; --ft-bg-h: 810px;
+    --ft-card-w: 331.5px;
+    --ft-qr-l: 16px; --ft-qr-x: 0; --ft-qr-t: 428px;
+  }
+}
+
+/* --- 1024: back to the white-card photo, QR on the right --- */
+@media (min-width: 1024px) {
+  .s-footer {
+    --ft-claim:  var(--black);
+    --ft-h:      calc(525px + (100vw - 1024px) * 0.46875);
+    --ft-bg-l:   calc(20px  + (100vw - 1024px) * 0.06009615);
+    --ft-bg-t:   calc(1px   + (100vw - 1024px) * -0.00240385);
+    --ft-bg-w:   calc(984px + (100vw - 1024px) * 0.87980769);
+    --ft-bg-h:   calc(525px + (100vw - 1024px) * 0.46875);
+    --ft-card-l: calc(40px  + (100vw - 1024px) * 0.09615385);
+    --ft-card-t: calc(113px + (100vw - 1024px) * 0.46394231);
+    --ft-card-w: calc(280px + (100vw - 1024px) * 0.38942308);
+    --ft-qr-l:   calc(731px + (100vw - 1024px) * 0.90384615);
+    --ft-qr-t:   calc(183px + (100vw - 1024px) * 0.34855769);
+    --ft-qr-x:   0;
+  }
+}
+
+/* --- 1440 --- */
+@media (min-width: 1440px) {
+  .s-footer {
+    --ft-h: 720px;
+    --ft-bg-l: 45px; --ft-bg-t: 0px; --ft-bg-w: 1350px; --ft-bg-h: 720px;
+    --ft-card-l: 80px; --ft-card-t: 306px; --ft-card-w: 442px;
+    --ft-qr-l: 1107px; --ft-qr-t: 328px;
+  }
+}
+
+/* ============================================================
+   List bullets
+   Figma draws every bullet as a flat 4px dot no matter the text
+   size, and colours it after the first text run. Chromium's default
+   `disc` scales with font-size (6px at 18px, 7px at 22px), so the
+   marker is drawn by hand instead.
+   ============================================================ */
+.v-card__list,
+.s-arch__notes { list-style: none; }
+
+.v-card__list li,
+.s-arch__notes li { position: relative; }
+
+.v-card__list li::before,
+.s-arch__notes li::before {
+  content: '';
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+}
+/* 18px / 21.375 line — dot centred on the first line */
+.v-card__list li::before {
+  left: -15.5px;
+  top: 11.6875px;
+  background: var(--white);
+}
+/* 22px / 26 line — the first run is green, so the dot is too */
+.s-arch__notes li::before {
+  left: calc(var(--ar-notes-ind) * -0.5606);
+  top: calc((var(--ar-notes-lh) - 4px) / 2 + 2px);
+  background: var(--green);
+}
