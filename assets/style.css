@@ -805,16 +805,18 @@ a.eco:active { scale: 1.005; }
    The 360 frame has no such section at all, so it is hidden below 768.
    ============================================================ */
 .s-trust {
-  --tr-pad:      36px;   /* side inset shared by stats, tabs and the wall */
+  /* --- 360 --- */
+  --tr-pad:      16px;   /* side inset shared by stats, tabs and the wall */
   --tr-gap:      20px;
   --tr-title:    28px;
   --tr-tab-fs:   12px;
   --tr-tab-lh:   14px;
-  --tr-tab-gap:  25px;
+  --tr-tab-gap:  20px;
   --tr-tab-h:    54px;
   --tr-grad-top: 204px;
   --tr-grad-h:   334px;
   --tr-grad-ih:  407px;   /* высота самой картинки; рамка её подрезает */
+  --tr-strip:    716px;   /* ширина полосы табов и стены логотипов */
 
   position: relative;
   background: var(--black);
@@ -823,8 +825,8 @@ a.eco:active { scale: 1.005; }
   align-items: center;
   gap: var(--tr-gap);
   padding: 40px 0;
+  overflow-x: clip;      /* свечение шире экрана — обрезаем, не роняя вёрстку */
 }
-@media (max-width: 767px) { .s-trust { display: none; } }
 
 .s-trust__title {
   margin: 0;
@@ -839,14 +841,14 @@ a.eco:active { scale: 1.005; }
   position: relative;
   z-index: 1;
   display: flex;
-  gap: 40px;
-  align-items: flex-start;
+  flex-direction: column;   /* на 360 блоки встают друг под друга */
+  gap: 20px;
+  align-items: stretch;
   width: 100%;
   padding: 0 var(--tr-pad);
 }
 .s-trust__stat {
-  flex: 1 1 0;
-  min-width: 0;
+  width: 100%;
   height: auto;
   aspect-ratio: 620 / 182;
   object-fit: cover;
@@ -859,6 +861,13 @@ a.eco:active { scale: 1.005; }
   gap: 20px;
   width: 100%;
   padding: 0 var(--tr-pad);
+  /* Ниже 768 макет оставляет табы и стену логотипов шириной 716 внутри
+     360-го кадра — половина уходит за экран. Раскладка сохранена как
+     нарисовано, полоса прокручивается вбок: ничего не выдумано и ничего
+     не потеряно. Решение то же, что и для схемы в секции 2. */
+  overflow-x: auto;
+  overflow-y: clip;
+  -webkit-overflow-scrolling: touch;
 }
 .s-trust__tabs {
   display: flex;
@@ -890,6 +899,15 @@ a.eco:active { scale: 1.005; }
   aspect-ratio: 3746 / 1181;
   object-fit: cover;
 }
+.s-trust__tabs,
+.s-trust__wall {
+  /* ниже 768 полоса шире экрана; правило должно стоять после собственных
+     объявлений этих блоков, иначе их width: 100% перебьёт его порядком */
+  width: var(--tr-strip);
+  max-width: none;   /* глобальный сброс images ограничивает шириной контейнера */
+  flex-shrink: 0;
+}
+
 .s-trust__grad {
   position: absolute;
   left: 0;
@@ -911,8 +929,13 @@ a.eco:active { scale: 1.005; }
 
 /* 768 -> 1024 */
 @media (min-width: 768px) {
+  .s-trust__stats { flex-direction: row; gap: 40px; align-items: flex-start; }
+  .s-trust__stat  { flex: 1 1 0; min-width: 0; width: auto; }
+  .s-trust__lower { overflow: visible; }
+  .s-trust__tabs, .s-trust__wall { width: 100%; }
   .s-trust {
     --tr-pad:      calc(36px  + (var(--vw) - 768px) * 0.015625);
+    --tr-tab-gap:  25px;
     --tr-title:    calc(28px  + (var(--vw) - 768px) * 0.015625);
     --tr-grad-top: calc(204px + (var(--vw) - 768px) * 0.16015625);
     --tr-grad-h:   calc(334px + (var(--vw) - 768px) * 0.30078125);
