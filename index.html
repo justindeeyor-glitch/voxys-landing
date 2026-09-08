@@ -18,6 +18,7 @@
   }
 </script>
 <script src="assets/reveal.js" defer></script>
+<script src="assets/arch-filter.js" defer></script>
 </head>
 <body>
 
@@ -162,72 +163,58 @@
   </header>
   <div class="s-arch__body">
     <div class="arch-col arch-col--stages">
-      <div class="stage"><span class="stage__n">01</span><span class="stage__t">Лидогенерация</span></div>
-      <div class="stage"><span class="stage__n">02</span><span class="stage__t">Конверсия продаж</span></div>
-      <div class="stage"><span class="stage__n">03</span><span class="stage__t">Поддержание отношений</span></div>
-      <div class="stage"><span class="stage__n">04</span><span class="stage__t">Повторные покупки</span></div>
-      <div class="stage"><span class="stage__n">05</span><span class="stage__t">Повышение среднего чека</span></div>
-      <div class="stage"><span class="stage__n">06</span><span class="stage__t">Управление платежами</span></div>
-      <div class="stage"><span class="stage__n">07</span><span class="stage__t">Предотвращение оттока</span></div>
-      <div class="stage"><span class="stage__n">08</span><span class="stage__t">Возврат и реактивация</span></div>
+      <div class="stage" data-arch="stage" data-dir="adtech" role="button" tabindex="0" aria-pressed="false"><span class="stage__n">01</span><span class="stage__t">Лидогенерация</span></div>
+      <div class="stage" data-arch="stage" data-dir="adtech cxtech" role="button" tabindex="0" aria-pressed="false"><span class="stage__n">02</span><span class="stage__t">Конверсия продаж</span></div>
+      <div class="stage" data-arch="stage" data-dir="cxtech" role="button" tabindex="0" aria-pressed="false"><span class="stage__n">03</span><span class="stage__t">Поддержание отношений</span></div>
+      <div class="stage" data-arch="stage" data-dir="adtech cxtech" role="button" tabindex="0" aria-pressed="false"><span class="stage__n">04</span><span class="stage__t">Повторные покупки</span></div>
+      <div class="stage" data-arch="stage" data-dir="adtech cxtech" role="button" tabindex="0" aria-pressed="false"><span class="stage__n">05</span><span class="stage__t">Повышение среднего чека</span></div>
+      <div class="stage" data-arch="stage" data-dir="cxtech fintech" role="button" tabindex="0" aria-pressed="false"><span class="stage__n">06</span><span class="stage__t">Управление платежами</span></div>
+      <div class="stage" data-arch="stage" data-dir="adtech cxtech" role="button" tabindex="0" aria-pressed="false"><span class="stage__n">07</span><span class="stage__t">Предотвращение оттока</span></div>
+      <div class="stage" data-arch="stage" data-dir="adtech cxtech" role="button" tabindex="0" aria-pressed="false"><span class="stage__n">08</span><span class="stage__t">Возврат и реактивация</span></div>
     </div>
     <div class="arch-col arch-col--dirs">
-      <div class="dir">
-        <img class="dir__obj" src="assets/img/obj-adtech.webp" alt="" aria-hidden="true">
+      <div class="dir" data-arch="dir" data-dir="adtech" role="button" tabindex="0" aria-pressed="false"><img class="dir__obj" src="assets/img/obj-adtech.webp" alt="" aria-hidden="true">
         <div class="dir__text"><p class="dir__t">AdTech</p><p class="dir__d">Привлечение, монетизация трафика и управление циклом клиента</p></div>
       </div>
-      <div class="dir">
-        <img class="dir__obj" src="assets/img/obj-cxtech.webp" alt="" aria-hidden="true">
+      <div class="dir" data-arch="dir" data-dir="cxtech" role="button" tabindex="0" aria-pressed="false"><img class="dir__obj" src="assets/img/obj-cxtech.webp" alt="" aria-hidden="true">
         <div class="dir__text"><p class="dir__t">CxTech</p><p class="dir__d">Контакт-центр и клиентский сервис<br>&#8203;</p></div>
       </div>
-      <div class="dir">
-        <img class="dir__obj" src="assets/img/obj-fintech.webp" alt="" aria-hidden="true">
+      <div class="dir" data-arch="dir" data-dir="fintech" role="button" tabindex="0" aria-pressed="false"><img class="dir__obj" src="assets/img/obj-fintech.webp" alt="" aria-hidden="true">
         <div class="dir__text"><p class="dir__t">FinTech</p><p class="dir__d">Взыскание задолженности <br>и платформа кредитных обязательств</p></div>
       </div>
     </div>
     <div class="arch-col arch-col--products">
-      <div class="prod">
-        <span class="prod__left"><span class="prod__dot prod__dot--a"></span><span class="prod__t">Afina DMP</span></span>
+      <div class="prod" data-arch="prod" data-dir="adtech" role="button" tabindex="0" aria-pressed="false"><span class="prod__left"><span class="prod__dot prod__dot--a"></span><span class="prod__t">Afina DMP</span></span>
         <span class="badge badge--ext">Внешний продукт</span>
       </div>
-      <div class="prod">
-        <span class="prod__left"><span class="prod__dot prod__dot--a"></span><span class="prod__t">Afina ads</span></span>
+      <div class="prod" data-arch="prod" data-dir="adtech" role="button" tabindex="0" aria-pressed="false"><span class="prod__left"><span class="prod__dot prod__dot--a"></span><span class="prod__t">Afina ads</span></span>
         <span class="badge badge--ext">Внешний продукт</span>
       </div>
-      <div class="prod">
-        <span class="prod__left"><span class="prod__dot prod__dot--a"></span><span class="prod__t">Afina CLP</span></span>
+      <div class="prod" data-arch="prod" data-dir="adtech" role="button" tabindex="0" aria-pressed="false"><span class="prod__left"><span class="prod__dot prod__dot--a"></span><span class="prod__t">Afina CLP</span></span>
         <span class="badge badge--ext">Внешний продукт</span>
       </div>
-      <div class="prod">
-        <span class="prod__left"><span class="prod__dot prod__dot--a"></span><span class="prod__t">Click2Money</span></span>
+      <div class="prod" data-arch="prod" data-dir="adtech" role="button" tabindex="0" aria-pressed="false"><span class="prod__left"><span class="prod__dot prod__dot--a"></span><span class="prod__t">Click2Money</span></span>
         <span class="badge badge--ext">Внешний продукт</span>
       </div>
-      <div class="prod">
-        <span class="prod__left"><span class="prod__dot prod__dot--b"></span><span class="prod__t">VOXconnect</span></span>
+      <div class="prod" data-arch="prod" data-dir="cxtech" role="button" tabindex="0" aria-pressed="false"><span class="prod__left"><span class="prod__dot prod__dot--b"></span><span class="prod__t">VOXconnect</span></span>
         <span class="badge badge--int">Внутренний продукт</span>
       </div>
-      <div class="prod">
-        <span class="prod__left"><span class="prod__dot prod__dot--b"></span><span class="prod__t">VOXaigent</span></span>
+      <div class="prod" data-arch="prod" data-dir="cxtech" role="button" tabindex="0" aria-pressed="false"><span class="prod__left"><span class="prod__dot prod__dot--b"></span><span class="prod__t">VOXaigent</span></span>
         <span class="badge badge--ext">Внешний продукт</span>
       </div>
-      <div class="prod">
-        <span class="prod__left"><span class="prod__dot prod__dot--b"></span><span class="prod__t">OMNIVOX</span></span>
+      <div class="prod" data-arch="prod" data-dir="cxtech" role="button" tabindex="0" aria-pressed="false"><span class="prod__left"><span class="prod__dot prod__dot--b"></span><span class="prod__t">OMNIVOX</span></span>
         <span class="badge badge--ext">Внешний продукт</span>
       </div>
-      <div class="prod">
-        <span class="prod__left"><span class="prod__dot prod__dot--b"></span><span class="prod__t">VOXsense</span></span>
+      <div class="prod" data-arch="prod" data-dir="cxtech" role="button" tabindex="0" aria-pressed="false"><span class="prod__left"><span class="prod__dot prod__dot--b"></span><span class="prod__t">VOXsense</span></span>
         <span class="badge badge--ext">Внешний продукт</span>
       </div>
-      <div class="prod">
-        <span class="prod__left"><span class="prod__dot prod__dot--b"></span><span class="prod__t">VOXwfm</span></span>
+      <div class="prod" data-arch="prod" data-dir="cxtech" role="button" tabindex="0" aria-pressed="false"><span class="prod__left"><span class="prod__dot prod__dot--b"></span><span class="prod__t">VOXwfm</span></span>
         <span class="badge badge--ext">Внешний продукт</span>
       </div>
-      <div class="prod">
-        <span class="prod__left"><span class="prod__dot prod__dot--c"></span><span class="prod__t">VOXYScollect</span></span>
+      <div class="prod" data-arch="prod" data-dir="fintech" role="button" tabindex="0" aria-pressed="false"><span class="prod__left"><span class="prod__dot prod__dot--c"></span><span class="prod__t">VOXYScollect</span></span>
         <span class="badge badge--int">Внутренний продукт</span>
       </div>
-      <div class="prod">
-        <span class="prod__left"><span class="prod__dot prod__dot--c"></span><span class="prod__t">VOXYS.VESTOR</span></span>
+      <div class="prod" data-arch="prod" data-dir="fintech" role="button" tabindex="0" aria-pressed="false"><span class="prod__left"><span class="prod__dot prod__dot--c"></span><span class="prod__t">VOXYS.VESTOR</span></span>
         <span class="badge badge--ext">Внешний продукт</span>
       </div>
     </div>

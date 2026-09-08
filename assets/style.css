@@ -937,6 +937,42 @@ a.eco:active { scale: 1.005; }
   .tab { padding: 12px 30px; }
 }
 
+/* ============================================================
+   Подсветка связок в «3 слоя продуктовой архитектуры»
+
+   Логика в assets/arch-filter.js. Здесь только два состояния:
+   .is-filtered на секции и .is-on на карточках, попавших в связку.
+
+   Переход прописан заново, потому что блок появления при скролле
+   задаёт этим же карточкам opacity .65s — для клика это слишком
+   вяло. Правило идёт ниже по файлу и при равной специфичности
+   побеждает; остальные свойства перенесены без изменений.
+   ============================================================ */
+.s-arch [data-arch] {
+  transition: opacity .22s ease-out,
+              translate .65s cubic-bezier(.22, .68, .3, 1),
+              scale .22s ease-out,
+              border-color .22s ease-out;
+}
+.s-arch.is-filtered [data-arch]:not(.is-on) { opacity: .28; }
+
+/* Масштаб при наведении — на всех карточках секции, включая
+   приглушённые: гаснет только яркость, отзывчивость остаётся. */
+@media (hover: hover) {
+  .s-arch [data-arch]:hover { scale: 1.025; }
+}
+.s-arch [data-arch]:active { scale: 1.005; }
+.s-arch [data-arch]:focus-visible {
+  outline: 2px solid var(--green-light);
+  outline-offset: 3px;
+}
+
+/* Ниже 1024 в макете остаются только карточки направлений,
+   связывать не с чем — курсор не обещает клика. */
+@media (min-width: 1024px) {
+  .s-arch [data-arch] { cursor: pointer; }
+}
+
 /* --- 1440: the two-line tabs are 70 and the one-line ones 68 --- */
 @media (min-width: 1440px) {
   .s-trust {
