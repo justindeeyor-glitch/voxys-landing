@@ -1206,87 +1206,58 @@ picture { display: contents; }
 /* ============================================================
    Появление при скролле
 
-   Чистый CSS, без единой строки JS — через scroll-driven
-   animations (`animation-timeline: view()`). Каждый элемент
-   ведёт собственная временная шкала, привязанная к его входу
-   в область просмотра, поэтому порядок появления получается
-   естественным сам собой, без задержек и счётчиков.
+   Ведёт JavaScript (assets/reveal.js) через IntersectionObserver —
+   он работает одинаково во всех браузерах, в отличие от CSS-шкал
+   прокрутки, которых пока нет в Firefox.
 
-   Всё завёрнуто в @supports: там, где шкалы не поддерживаются
-   (сейчас это Firefox), правила просто не применяются и
-   контент виден сразу — скрытым он не остаётся никогда.
-   Плюс @media prefers-reduced-motion для тех, кто отключил
-   анимации в системе.
+   Скрытое состояние навешивается только при классе .js-reveal,
+   который скрипт в <head> ставит до первой отрисовки. Если JS
+   отключён, не загрузился или в системе включено «уменьшить
+   движение» — класса нет, и контент виден сразу. Невидимым он
+   не остаётся никогда.
 
-   Анимируются только opacity и transform, так что раскладка
-   не смещается ни на пиксель.
+   Анимируются только opacity и transform, поэтому раскладка
+   не смещается ни на пиксель и всё уходит в композитор.
    ============================================================ */
-@media (prefers-reduced-motion: no-preference) {
-  @supports (animation-timeline: view()) {
 
-    @keyframes reveal {
-      from { opacity: 0; transform: translateY(28px); }
-      to   { opacity: 1; transform: none; }
-    }
-    /* для элементов, у которых transform уже занят позиционированием */
-    @keyframes reveal-fade {
-      from { opacity: 0; }
-      to   { opacity: 1; }
-    }
-
-    .s-cycle__title,
-    .s-cycle__col,
-    .s-cycle__img,
-    .s-verticals .v-card,
-    .s-eco__title,
-    .s-eco .eco,
-    .s-arch__title,
-    .s-arch__sub,
-    .s-arch__notes,
-    .s-arch .stage,
-    .s-arch .dir,
-    .s-arch .prod,
-    .s-trust__title,
-    .s-trust__stat,
-    .s-trust__tabs,
-    .s-trust__wall,
-    .s-mission__claim,
-    .s-mission__box,
-    .s-mission__wordmark,
-    .s-mission__values > .s-mission__label,
-    .s-mission .val,
-    .s-footer__card {
-      animation: reveal linear both;
-      animation-timeline: view();
-      animation-range: entry 5% entry 50%;
-    }
-
-    /* transform занят: --50%/--50% у центра схемы и сдвиг у QR-блока */
-    .s-cycle__center,
-    .s-footer__contact {
-      animation: reveal-fade linear both;
-      animation-timeline: view();
-      animation-range: entry 5% entry 50%;
-    }
-
-    /* карточки направлений стоят в ряд — разводим их по времени,
-       иначе появляются одновременно и это читается как рывок */
-    .s-verticals .v-card:nth-of-type(2) { animation-range: entry 11% entry 56%; }
-    .s-verticals .v-card:nth-of-type(3) { animation-range: entry 17% entry 62%; }
-
-    /* длинные вертикальные списки — короче ход, иначе половина
-       экрана оказывается наполовину прозрачной */
-    .s-arch .stage,
-    .s-arch .prod,
-    .s-eco .eco {
-      animation-range: entry 0% entry 32%;
-    }
-
-    /* крупные блоки на всю ширину заезжают чуть заметнее */
-    .s-mission__wordmark,
-    .s-trust__wall,
-    .s-footer__card {
-      animation-range: entry 0% entry 60%;
-    }
-  }
+/* Список должен совпадать с SELECTOR в assets/reveal.js */
+.js-reveal .s-cycle__title,
+.js-reveal .s-cycle__col,
+.js-reveal .s-cycle__img,
+.js-reveal .s-cycle__center,
+.js-reveal .v-card,
+.js-reveal .s-eco__title,
+.js-reveal .eco,
+.js-reveal .s-arch__title,
+.js-reveal .s-arch__sub,
+.js-reveal .s-arch__notes,
+.js-reveal .stage,
+.js-reveal .dir,
+.js-reveal .prod,
+.js-reveal .s-trust__title,
+.js-reveal .s-trust__stat,
+.js-reveal .s-trust__tabs,
+.js-reveal .s-trust__wall,
+.js-reveal .s-mission__claim,
+.js-reveal .s-mission__box,
+.js-reveal .s-mission__wordmark,
+.js-reveal .s-mission__values > .s-mission__label,
+.js-reveal .val,
+.js-reveal .s-footer__card,
+.js-reveal .s-footer__contact {
+  opacity: 0;
+  transition: opacity .65s ease-out, translate .65s cubic-bezier(.22, .68, .3, 1);
+  transition-delay: var(--reveal-delay, 0ms);
+  translate: 0 28px;          /* отдельно от transform: тот занят позиционированием */
+  will-change: opacity, translate;
 }
+.js-reveal .is-in {
+  opacity: 1;
+  translate: none;
+  will-change: auto;
+}
+
+/* карточки направлений стоят в ряд — разводим по времени,
+   иначе появляются разом и это читается как рывок */
+.js-reveal .v-card:nth-of-type(2) { --reveal-delay: 90ms; }
+.js-reveal .v-card:nth-of-type(3) { --reveal-delay: 180ms; }

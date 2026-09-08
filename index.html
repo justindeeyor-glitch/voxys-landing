@@ -9,6 +9,15 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;500;600;700;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/style.css">
+<script>
+  /* Ставим класс до первой отрисовки: иначе элементы мелькнут видимыми,
+     а потом спрячутся. Если в системе включено «уменьшить движение» —
+     класс не ставим вовсе, и страница остаётся статичной. */
+  if (!window.matchMedia || !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    document.documentElement.classList.add('js-reveal');
+  }
+</script>
+<script src="assets/reveal.js" defer></script>
 </head>
 <body>
 
