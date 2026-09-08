@@ -1312,6 +1312,7 @@ a.eco:active { scale: 1.005; }
 .js-reveal .stage,
 .js-reveal .dir,
 .js-reveal .prod,
+.js-reveal .arch-acc .acc,
 .js-reveal .s-trust__title,
 .js-reveal .s-trust__stat,
 .js-reveal .s-trust__tabs,
@@ -1340,3 +1341,137 @@ a.eco:active { scale: 1.005; }
    иначе появляются разом и это читается как рывок */
 .js-reveal .v-card:nth-of-type(2) { --reveal-delay: 90ms; }
 .js-reveal .v-card:nth-of-type(3) { --reveal-delay: 180ms; }
+
+/* ============================================================
+   Аккордеон вместо трёх колонок ниже 1024
+   Макет 360: нода 391:462
+
+   Три колонки на узком экране не помещаются, поэтому то же
+   содержимое собрано по направлениям: шапка, продукты направления,
+   его этапы. Этапы повторяются в разных блоках — так и в макете:
+   этап 02 относится и к AdTech, и к CxTech.
+
+   Свёрнутое состояние в макете не нарисовано. По решению заказчика
+   в закрытом виде остаётся шапка целиком — название и описание.
+   ============================================================ */
+.arch-acc {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 20px var(--ar-pad) 40px;
+}
+@media (min-width: 1024px) { .arch-acc { display: none; } }
+@media (max-width: 1023.98px) { .s-arch__body { display: none; } }
+
+.acc {
+  border: 1px solid var(--green);
+  border-radius: 20px;
+  overflow: clip;
+}
+.acc__head {
+  width: 100%;
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 20px;
+  background: none;
+  border: 0;
+  font: inherit;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+.acc__text { display: flex; flex-direction: column; gap: 12px; flex: 1 1 auto; min-width: 0; }
+.acc__t {
+  font-size: 22px;
+  font-weight: 700;
+  line-height: var(--lh-22);
+  color: var(--white);
+}
+.acc__d {
+  font-size: 18px;
+  line-height: var(--lh-18);
+  color: var(--grey-dark);
+}
+
+/* Указателя в макете нет, но свёрнутый блок без него не читается
+   как раскрывающийся — добавлена стрелка в акцентном цвете. */
+.acc__chev {
+  flex-shrink: 0;
+  width: 10px;
+  height: 10px;
+  margin-top: 8px;
+  border-right: 2px solid var(--green);
+  border-bottom: 2px solid var(--green);
+  rotate: 45deg;
+  transition: rotate .25s ease-out;
+}
+.acc.is-open .acc__chev { rotate: -135deg; }
+
+/* Раскрытие через grid-template-rows: единственный способ анимировать
+   переход к высоте содержимого, не зная её заранее. */
+.acc__body {
+  display: grid;
+  grid-template-rows: 1fr;          /* без JS блок раскрыт */
+  visibility: visible;
+  /* обрезка именно здесь, а не на .acc__inner: иначе паддинг внутреннего
+     блока не схлопывается и закрытая панель сохраняет лишние 20px */
+  overflow: hidden;
+  transition: grid-template-rows .3s ease, visibility 0s;
+}
+.js-acc .acc:not(.is-open) .acc__body {
+  grid-template-rows: 0fr;
+  visibility: hidden;
+  transition: grid-template-rows .3s ease, visibility 0s .3s;
+}
+.acc__inner {
+  min-height: 0;                    /* иначе grid не даст строке сжаться в 0 */
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 0 20px;
+}
+/* Нижний отступ именно margin у последней строки, а не padding контейнера:
+   padding не даёт строке грида схлопнуться в ноль, и закрытая панель
+   сохраняла бы лишние 20px. */
+.acc__inner > :last-child { margin-bottom: 20px; }
+
+/* строка продукта: точка, название, бейдж */
+.acc-prod {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.acc-prod__left { display: flex; align-items: center; gap: 8px; min-width: 0; }
+.acc-prod__t {
+  font-size: 18px;
+  font-weight: 500;
+  line-height: var(--lh-18);
+  color: var(--white);
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.acc-prod .badge { font-size: 10px; line-height: 12px; padding: 4px 16px; }
+
+/* строка этапа: пилюля с номером и названием */
+.acc-stage {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 12px;
+  border: 1px solid var(--green);
+  border-radius: 20px;
+}
+.acc-stage__n {
+  font-size: 22px;
+  font-weight: 700;
+  line-height: var(--lh-22);
+  color: var(--green);
+}
+.acc-stage__t {
+  font-size: 16px;
+  font-weight: 500;
+  line-height: var(--lh-16);
+  color: var(--white);
+}

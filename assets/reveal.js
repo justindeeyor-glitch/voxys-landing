@@ -15,6 +15,7 @@
     '.v-card',
     '.s-eco__title', '.eco',
     '.s-arch__title', '.s-arch__sub', '.s-arch__notes', '.stage', '.dir', '.prod',
+    '.arch-acc .acc',
     '.s-trust__title', '.s-trust__stat', '.s-trust__tabs', '.s-trust__wall',
     '.s-mission__claim', '.s-mission__box', '.s-mission__wordmark',
     '.s-mission__values > .s-mission__label', '.val',

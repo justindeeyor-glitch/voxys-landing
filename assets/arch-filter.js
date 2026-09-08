@@ -88,3 +88,39 @@
   if (wide.addEventListener) wide.addEventListener('change', onChange);
   else wide.addListener(onChange);
 })();
+
+/* Аккордеон ниже 1024.
+
+   Класс .js-acc ставится в <head> до первой отрисовки. Без него панели
+   раскрыты — так контент остаётся доступен, если скрипт не отработал,
+   и не мигает раскрытым при загрузке.
+
+   По решению заказчика: при загрузке всё свёрнуто, открытым может быть
+   только один блок. */
+
+(function () {
+  'use strict';
+
+  var heads = document.querySelectorAll('.arch-acc .acc__head');
+  if (!heads.length) return;
+
+  function toggle(head) {
+    var panel = head.parentNode;
+    var open  = panel.classList.contains('is-open');
+
+    for (var i = 0; i < heads.length; i++) {           // открыт только один
+      var p = heads[i].parentNode;
+      p.classList.remove('is-open');
+      heads[i].setAttribute('aria-expanded', 'false');
+    }
+    if (!open) {
+      panel.classList.add('is-open');
+      head.setAttribute('aria-expanded', 'true');
+    }
+  }
+
+  for (var i = 0; i < heads.length; i++) {
+    heads[i].setAttribute('aria-expanded', 'false');   // при загрузке всё закрыто
+    heads[i].addEventListener('click', function (e) { toggle(e.currentTarget); });
+  }
+})();
