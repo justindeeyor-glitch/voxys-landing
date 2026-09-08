@@ -221,12 +221,18 @@ picture { display: contents; }
   color: var(--white);
 }
 
-/* below 768 the stage keeps its designed width and scrolls */
+/* Ниже 768 сцена сохраняет ширину из макета и скроллится вбок.
+
+   Вертикальный запас в 40px — обязателен: блоки «Конверсия продаж» и
+   «Поддержание отношений» в макете намеренно висят выше и ниже сцены,
+   и без запаса обёртка их срезает. Отрицательное поле возвращает этот
+   запас обратно в поток, чтобы высота секции осталась прежней. */
 .s-cycle__viewport {
   width: 100%;
   overflow-x: auto;
   overflow-y: clip;
-  padding: 0 16px;
+  padding: 40px 16px;
+  margin-block: -40px;
   -webkit-overflow-scrolling: touch;
 }
 .s-cycle__stage {
@@ -326,7 +332,9 @@ picture { display: contents; }
     --cy-img-w:      calc(332px + (var(--vw) - 768px) * 0.375);
     --cy-img-h:      calc(142px + (var(--vw) - 768px) * 0.16015625);
   }
-  .s-cycle__viewport { overflow: clip; }   /* не скроллер -> view() видит документ */
+  /* обёртка нужна только ради бокового скролла ниже 768;
+     здесь она должна быть полностью прозрачной для содержимого */
+  .s-cycle__viewport { overflow: visible; padding: 0 16px; margin-block: 0; }
   .s-cycle__stage { width: 100%; }
 }
 
@@ -1080,7 +1088,7 @@ a.eco:active { scale: 1.005; }
   --ft-bg-h:     845px;
   --ft-card-l:   16px;
   --ft-card-t:   80px;
-  --ft-card-w:   328px;
+  --ft-card-w:   min(328px, calc(var(--vw) - 32px));   /* ниже 360 экран уже карточки */
   --ft-qr-l:     50%;
   --ft-qr-t:     468px;
   --ft-qr-x:     -50%;
