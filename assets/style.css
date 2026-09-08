@@ -504,7 +504,26 @@ picture { display: contents; }
   padding: 12px;
   border: 1px solid var(--green);
   border-radius: 12px;
+  /* десять из одиннадцати карточек — ссылки на сайты продуктов */
+  color: inherit;
+  text-decoration: none;
+  transition: scale .22s ease-out, border-color .22s ease-out;
 }
+
+/* Приподнимаем карточку под курсором. Масштаб задан отдельным свойством
+   scale, а не transform: тот участвует в анимации появления, и они бы
+   затирали друг друга. Отдельные свойства складываются. */
+@media (hover: hover) {
+  a.eco:hover {
+    scale: 1.025;
+    border-color: var(--green-light);
+  }
+}
+a.eco:focus-visible {
+  outline: 2px solid var(--green-light);
+  outline-offset: 3px;
+}
+a.eco:active { scale: 1.005; }
 .eco__t {
   font-size: 22px;
   font-weight: 500;
@@ -1258,7 +1277,8 @@ picture { display: contents; }
 .js-reveal .s-footer__card,
 .js-reveal .s-footer__contact {
   opacity: 0;
-  transition: opacity .65s ease-out, translate .65s cubic-bezier(.22, .68, .3, 1);
+  transition: opacity .65s ease-out, translate .65s cubic-bezier(.22, .68, .3, 1),
+              scale .22s ease-out, border-color .22s ease-out;
   transition-delay: var(--reveal-delay, 0ms);
   translate: 0 28px;          /* отдельно от transform: тот занят позиционированием */
   will-change: opacity, translate;
