@@ -40,7 +40,10 @@ body {
   color: var(--white);
   font-family: 'Golos Text', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
   font-weight: 400;
-  overflow-x: hidden;
+  /* Никакого overflow-x: hidden на body — он делает body скролл-контейнером,
+     и scroll-driven анимации начинают следить за ним вместо документа,
+     из-за чего их шкала замирает. Всё, что вылезает вбок, и так обрезано
+     своими секциями (у них overflow: clip). */
 }
 img, svg { display: block; max-width: 100%; }
 p, ul { margin: 0; }
@@ -58,7 +61,7 @@ ul { padding: 0; }
 .s-hero {
   position: relative;
   background: var(--black);
-  overflow: hidden;
+  overflow: clip;
   display: flex;
   /* --- 360 --- */
   flex-direction: column;
@@ -71,7 +74,7 @@ picture { display: contents; }
 .s-hero__bgwrap {
   position: absolute;
   inset: 0;
-  overflow: hidden;
+  overflow: clip;
   pointer-events: none;
   z-index: 0;
 }
@@ -98,6 +101,7 @@ picture { display: contents; }
   flex-direction: column;
   align-items: flex-start;
   gap: 30px;
+  max-width: 100%;
 }
 .s-hero__logo { width: 280px; height: 60px; }
 
@@ -209,7 +213,7 @@ picture { display: contents; }
 .s-cycle__viewport {
   width: 100%;
   overflow-x: auto;
-  overflow-y: hidden;
+  overflow-y: clip;
   padding: 0 16px;
   -webkit-overflow-scrolling: touch;
 }
@@ -310,7 +314,7 @@ picture { display: contents; }
     --cy-img-w:      calc(332px + (100vw - 768px) * 0.375);
     --cy-img-h:      calc(142px + (100vw - 768px) * 0.16015625);
   }
-  .s-cycle__viewport { overflow-x: visible; }
+  .s-cycle__viewport { overflow: clip; }   /* не скроллер -> view() видит документ */
   .s-cycle__stage { width: 100%; }
 }
 
@@ -358,7 +362,7 @@ picture { display: contents; }
   align-items: stretch;
   gap: 20px;
   padding: 40px 16px;
-  overflow: hidden;
+  overflow: clip;
 }
 .s-verticals__grad-wrap { display: none; }   /* not present below 1024 */
 .s-verticals__grad {
@@ -684,7 +688,7 @@ picture { display: contents; }
   line-height: var(--lh-22);
   color: var(--white);
   white-space: nowrap;
-  overflow: hidden;
+  overflow: clip;
   text-overflow: ellipsis;
 }
 .badge {
@@ -852,7 +856,7 @@ picture { display: contents; }
   top: var(--tr-grad-top);
   width: 100%;
   height: var(--tr-grad-h);
-  overflow: hidden;
+  overflow: clip;
   pointer-events: none;
   z-index: 0;
 }
@@ -931,6 +935,8 @@ picture { display: contents; }
 }
 .s-mission__claim {
   width: 100%;
+  overflow-wrap: break-word;   /* страховка ниже 360: «трансформируем» на 36px
+                                  не помещается в узкий экран */
   font-size: 36px;
   font-weight: 500;
   line-height: 1;
@@ -1052,7 +1058,7 @@ picture { display: contents; }
   position: relative;
   background: var(--black);
   height: var(--ft-h);
-  overflow: hidden;
+  overflow: clip;
 }
 .s-footer__bg {
   position: absolute;
@@ -1088,6 +1094,7 @@ picture { display: contents; }
 }
 .s-footer__kicker {
   width: 331.5px;
+  max-width: 100%;
   font-size: 24px;
   line-height: 1;
   color: var(--green);
@@ -1194,4 +1201,92 @@ picture { display: contents; }
   left: calc(var(--ar-notes-ind) * -0.5606);
   top: calc((var(--ar-notes-lh) - 4px) / 2 + 2px);
   background: var(--green);
+}
+
+/* ============================================================
+   Появление при скролле
+
+   Чистый CSS, без единой строки JS — через scroll-driven
+   animations (`animation-timeline: view()`). Каждый элемент
+   ведёт собственная временная шкала, привязанная к его входу
+   в область просмотра, поэтому порядок появления получается
+   естественным сам собой, без задержек и счётчиков.
+
+   Всё завёрнуто в @supports: там, где шкалы не поддерживаются
+   (сейчас это Firefox), правила просто не применяются и
+   контент виден сразу — скрытым он не остаётся никогда.
+   Плюс @media prefers-reduced-motion для тех, кто отключил
+   анимации в системе.
+
+   Анимируются только opacity и transform, так что раскладка
+   не смещается ни на пиксель.
+   ============================================================ */
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+
+    @keyframes reveal {
+      from { opacity: 0; transform: translateY(28px); }
+      to   { opacity: 1; transform: none; }
+    }
+    /* для элементов, у которых transform уже занят позиционированием */
+    @keyframes reveal-fade {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
+
+    .s-cycle__title,
+    .s-cycle__col,
+    .s-cycle__img,
+    .s-verticals .v-card,
+    .s-eco__title,
+    .s-eco .eco,
+    .s-arch__title,
+    .s-arch__sub,
+    .s-arch__notes,
+    .s-arch .stage,
+    .s-arch .dir,
+    .s-arch .prod,
+    .s-trust__title,
+    .s-trust__stat,
+    .s-trust__tabs,
+    .s-trust__wall,
+    .s-mission__claim,
+    .s-mission__box,
+    .s-mission__wordmark,
+    .s-mission__values > .s-mission__label,
+    .s-mission .val,
+    .s-footer__card {
+      animation: reveal linear both;
+      animation-timeline: view();
+      animation-range: entry 5% entry 50%;
+    }
+
+    /* transform занят: --50%/--50% у центра схемы и сдвиг у QR-блока */
+    .s-cycle__center,
+    .s-footer__contact {
+      animation: reveal-fade linear both;
+      animation-timeline: view();
+      animation-range: entry 5% entry 50%;
+    }
+
+    /* карточки направлений стоят в ряд — разводим их по времени,
+       иначе появляются одновременно и это читается как рывок */
+    .s-verticals .v-card:nth-of-type(2) { animation-range: entry 11% entry 56%; }
+    .s-verticals .v-card:nth-of-type(3) { animation-range: entry 17% entry 62%; }
+
+    /* длинные вертикальные списки — короче ход, иначе половина
+       экрана оказывается наполовину прозрачной */
+    .s-arch .stage,
+    .s-arch .prod,
+    .s-eco .eco {
+      animation-range: entry 0% entry 32%;
+    }
+
+    /* крупные блоки на всю ширину заезжают чуть заметнее */
+    .s-mission__wordmark,
+    .s-trust__wall,
+    .s-footer__card {
+      animation-range: entry 0% entry 60%;
+    }
+  }
 }
