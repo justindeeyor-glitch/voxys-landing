@@ -1296,6 +1296,11 @@ a.eco:active { scale: 1.005; }
 
    Анимируются только opacity и transform, поэтому раскладка
    не смещается ни на пиксель и всё уходит в композитор.
+
+   ВАЖНО: каждый селектор ниже должен весить ровно два класса.
+   Показывает элемент правило `.js-reveal .is-in` — оно весит два,
+   и при трёх элемент останется прозрачным навсегда. Если нужен
+   вложенный селектор, заворачивайте предка в :where().
    ============================================================ */
 
 /* Список должен совпадать с SELECTOR в assets/reveal.js */
@@ -1312,7 +1317,7 @@ a.eco:active { scale: 1.005; }
 .js-reveal .stage,
 .js-reveal .dir,
 .js-reveal .prod,
-.js-reveal .arch-acc .acc,
+.js-reveal .acc,          /* ровно один класс: иначе .is-in не перебьёт */
 .js-reveal .s-trust__title,
 .js-reveal .s-trust__stat,
 .js-reveal .s-trust__tabs,
@@ -1320,7 +1325,7 @@ a.eco:active { scale: 1.005; }
 .js-reveal .s-mission__claim,
 .js-reveal .s-mission__box,
 .js-reveal .s-mission__wordmark,
-.js-reveal .s-mission__values > .s-mission__label,
+.js-reveal :where(.s-mission__values) > .s-mission__label,   /* :where() не добавляет веса */
 .js-reveal .val,
 .js-reveal .s-footer__card,
 .js-reveal .s-footer__contact {
